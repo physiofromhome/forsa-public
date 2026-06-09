@@ -13,7 +13,7 @@ export default function Layout({ children }) {
         <div className="container topbar-inner">
           <Link to="/" className="brand">
             Forsa<span className="dot">.</span>
-            <small>Market Intelligence</small>
+            <small className="brand-sub">Market Intelligence</small>
           </Link>
 
           <nav className="nav">

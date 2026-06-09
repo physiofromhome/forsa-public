@@ -93,6 +93,7 @@ input { font-family: var(--body); }
 .nav a {
   font-size: 13px; color: var(--text-2); padding: 7px 13px; border-radius: var(--r-sm);
   transition: color .15s, background .15s;
+  white-space: nowrap;
 }
 .nav a:hover { color: var(--text-1); background: var(--bg-hover); }
 .nav a.active { color: var(--ember); }
@@ -102,6 +103,7 @@ input { font-family: var(--body); }
   background: var(--bg-card); color: var(--text-1);
   padding: 8px 16px; border-radius: var(--r-sm); font-size: 13px;
   transition: border-color .15s, background .15s, transform .05s;
+  white-space: nowrap;
 }
 .btn:hover { border-color: var(--ember); background: var(--bg-hover); }
 .btn:active { transform: translateY(1px); }
@@ -176,6 +178,16 @@ input { font-family: var(--body); }
 }
 
 @media (max-width: 640px) {
-  .nav a { padding: 6px 9px; font-size: 12px; }
+  .topbar-inner { height: 56px; }
+  .nav { gap: 2px; }
+  .nav a { padding: 6px 8px; font-size: 12px; }
   .brand { font-size: 19px; }
+  .brand-sub { display: none; }   /* free up width so nav never wraps */
+  .btn { padding: 7px 12px; font-size: 12px; }
+  .container { padding: 0 14px; }
+}
+
+@media (max-width: 380px) {
+  .nav a { padding: 5px 6px; font-size: 11px; }
+  .btn { padding: 6px 10px; font-size: 11px; }
 }
