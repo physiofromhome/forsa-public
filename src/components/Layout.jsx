@@ -22,6 +22,8 @@ export default function Layout({ children }) {
                 <Link className={is("/dashboard")} to="/dashboard">Dashboard</Link>
                 <Link className={is("/markets")} to="/markets">Markets</Link>
                 <Link className={is("/patterns")} to="/patterns">Patterns</Link>
+                <Link className={is("/community")} to="/community">Community</Link>
+                <Link className={is("/profile")} to="/profile">Profile</Link>
                 <button
                   className="btn btn-ghost"
                   onClick={() => { logout(); nav("/"); }}

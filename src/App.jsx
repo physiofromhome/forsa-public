@@ -7,6 +7,10 @@ import Dashboard from "./pages/Dashboard";
 import Markets from "./pages/Markets";
 import CoinDetail from "./pages/CoinDetail";
 import Patterns from "./pages/Patterns";
+import Community from "./pages/Community";
+import Rooms from "./pages/Rooms";
+import Room from "./pages/Room";
+import Profile from "./pages/Profile";
 
 function Protected({ children }) {
   const { authed } = useAuth();
@@ -31,6 +35,10 @@ export default function App() {
             <Route path="/markets" element={<Protected><Markets /></Protected>} />
             <Route path="/markets/:sym" element={<Protected><CoinDetail /></Protected>} />
             <Route path="/patterns" element={<Protected><Patterns /></Protected>} />
+            <Route path="/community" element={<Protected><Community /></Protected>} />
+            <Route path="/community/rooms" element={<Protected><Rooms /></Protected>} />
+            <Route path="/community/:coin" element={<Protected><Room /></Protected>} />
+            <Route path="/profile" element={<Protected><Profile /></Protected>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Layout>

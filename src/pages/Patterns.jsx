@@ -11,6 +11,8 @@ export default function Patterns() {
   const [horizon, setHorizon] = useState(14);
   const [minMatch, setMinMatch] = useState(4);
   const [result, setResult] = useState(null);
+  const [narrative, setNarrative] = useState(null);
+  const [narrativeLoading, setNarrativeLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
 
@@ -19,11 +21,19 @@ export default function Patterns() {
   }, []);
 
   async function run() {
-    setLoading(true); setErr(""); setResult(null);
+    setLoading(true); setErr(""); setResult(null); setNarrative(null);
     setParams({ coin });
     try {
       const r = await data.patternMatch(coin, { minMatch, horizon });
       setResult(r);
+      // Fetch the premium narrative in parallel once we know there are matches
+      if (r.available && r.match_count > 0) {
+        setNarrativeLoading(true);
+        data.patternNarrative(coin, { minMatch, horizon })
+          .then((nr) => setNarrative(nr))
+          .catch(() => setNarrative(null))
+          .finally(() => setNarrativeLoading(false));
+      }
     } catch (e) {
       setErr(e.message);
     } finally {
@@ -116,6 +126,46 @@ export default function Patterns() {
               </span>
             </div>
           </div>
+
+          {(narrativeLoading || narrative?.narrative) && (
+            <div className="card" style={{
+              marginBottom: 16,
+              background: "linear-gradient(160deg, #161a23 0%, #14181f 100%)",
+              borderColor: "rgba(232,112,58,0.28)",
+              position: "relative",
+              overflow: "hidden",
+            }}>
+              <div style={{
+                position: "absolute", top: 0, left: 0, right: 0, height: 2,
+                background: "linear-gradient(90deg, var(--ember), transparent)",
+              }} />
+              <div className="card-head">
+                <div className="row" style={{ gap: 9, alignItems: "center" }}>
+                  <span className="display" style={{ fontSize: 16 }}>Analyst note</span>
+                  {narrative?.narrative_source === "ai" && (
+                    <span className="label" style={{ color: "var(--ember)", letterSpacing: "0.12em" }}>
+                      Forsa Intelligence
+                    </span>
+                  )}
+                </div>
+                <span className="label">{coin} · {horizon}d</span>
+              </div>
+
+              {narrativeLoading ? (
+                <div className="row" style={{ gap: 10, padding: "8px 0" }}>
+                  <span className="spinner" />
+                  <span className="muted" style={{ fontSize: 13 }}>Reading the historical record…</span>
+                </div>
+              ) : (
+                <p style={{
+                  fontSize: 15, lineHeight: 1.7, color: "var(--text-1)",
+                  fontFamily: "var(--body)", fontWeight: 300, whiteSpace: "pre-wrap",
+                }}>
+                  {narrative.narrative}
+                </p>
+              )}
+            </div>
+          )}
 
           {dist.length > 0 && (
             <div className="card" style={{ marginBottom: 16 }}>

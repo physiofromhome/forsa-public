@@ -135,11 +135,50 @@ export const data = {
       `/public/pattern-match/${sym}?min_match=${minMatch}&horizon=${horizon}&lookback=${lookback}`
     );
   },
+  patternNarrative(sym, { minMatch = 4, horizon = 14 } = {}) {
+    return request(
+      `/public/pattern-narrative/${sym}?min_match=${minMatch}&horizon=${horizon}`
+    );
+  },
   // Reused, already-existing bridge endpoints that are genuinely neutral:
   news() {
     return request("/news");
   },
   fearGreedHistory() {
     return request("/market/fear-greed-history");
+  },
+};
+
+// ── Community (user-generated; platform, not adviser) ────────────────────────
+export const community = {
+  rooms() {
+    return request("/community/rooms");
+  },
+  room(coin, limit = 30) {
+    return request(`/community/room/${coin}?limit=${limit}`);
+  },
+  feed(limit = 40) {
+    return request(`/community/feed?limit=${limit}`);
+  },
+  post(coin, body) {
+    return request("/community/post", { method: "POST", body: { coin, body } });
+  },
+  deletePost(id) {
+    return request(`/community/post/${id}`, { method: "DELETE" });
+  },
+  like(id) {
+    return request(`/community/post/${id}/like`, { method: "POST" });
+  },
+  comments(id) {
+    return request(`/community/post/${id}/comments`);
+  },
+  addComment(id, body) {
+    return request(`/community/post/${id}/comment`, { method: "POST", body: { body } });
+  },
+  getProfile(email) {
+    return request(`/community/profile${email ? `?email=${encodeURIComponent(email)}` : ""}`);
+  },
+  setProfile(profile) {
+    return request("/community/profile", { method: "POST", body: profile });
   },
 };
